@@ -1,4 +1,7 @@
 import streamlit as st
+from utils import (
+    format_number
+)
 from finance import (
     calculate_loan_amount,
     calculate_profitability_percentage,
@@ -25,14 +28,15 @@ profitability = calculate_profitability_percentage(monthly_rent, rental_vacancie
 
 st.subheader("Données bancaires", divider="gray")
 col1, col2 = st.columns(2)
-bank_interest_rate = col2.slider("Taux d'intérêts", 0.00, 8.00, 1.00)
-loan_duration_year = col2.slider("Durée de l'emprunt", 0, 25, 20)
+bank_interest_rate = col2.slider("Taux d'intérêts", 0.01, 8.00, 1.00)
+loan_duration_year = col2.slider("Durée de l'emprunt", 1, 25, 20)
 monthly_loan_insurance_cost = col2.number_input("Coût assurance emprunteur (mois)", min_value=0, value=30)
 monthly_pno_insurance_cost = col2.number_input("Coût assurance propriétaire non occupant (mois)", min_value=0, value=15)
 monthly_payment, total_loan_cost, loan_cost,  = calculate_loan_cost(total_property_loan, bank_interest_rate, loan_duration_year, monthly_loan_insurance_cost, monthly_pno_insurance_cost)
-col1.metric(label="Montant emprunté", value=f"{total_property_loan}")
-col1.metric(label="Coût total du crédit", value=f"{total_loan_cost:.2f}")
-col1.metric(label="Mensualités de crédit", value=f"{monthly_payment:.2f}")
+col1.metric(label="Montant emprunté", value=f"{format_number(total_property_loan)}")
+#col1.metric(label="Coût total du crédit", value=f"{total_loan_cost:.2f}")
+col1.metric(label="Coût total du crédit", value=f"{format_number(total_loan_cost)}")
+col1.metric(label="Mensualités de crédit", value=f"{format_number(monthly_payment)}")
 
 
 monthly_cashflow_pretax = calculate_cashflow_pretax(monthly_rent, monthly_payment, expenses)
@@ -42,5 +46,5 @@ monthly_payment_with_expenses = calculate_loan_and_expenses(monthly_payment, exp
 st.subheader("Kpis", divider="gray")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Rentabilité", value=f"{profitability:.1f}%")
-col2.metric(label="Emprunt et charges (mois)", value=f"{monthly_payment_with_expenses:.2f}") # à remplacer par les charges mensuelles
-col3.metric(label="Cashflow avant impôts (mois)", value=f"{monthly_cashflow_pretax:.2f}")
+col2.metric(label="Emprunt et charges (mois)", value=f"{format_number(monthly_payment_with_expenses)}") # à remplacer par les charges mensuelles
+col3.metric(label="Cashflow avant impôts (mois)", value=f"{format_number(monthly_cashflow_pretax)}")
