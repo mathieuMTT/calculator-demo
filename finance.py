@@ -1,5 +1,18 @@
 # finance.py
 
+def add_percentage(base: float, percent: float) -> float:
+    """
+    Adds a percentage to a given number and returns both the new total and the percentage value.
+
+    :param base: The base number.
+    :param percent: The percentage to add.
+    :return: A tuple containing the new number with the percentage added and the percentage value.
+    """
+    total = base * (1 + percent / 100)
+    increment = total - base
+    return total, increment
+
+
 def calculate_loan_amount(property_value: float, property_work: float, contribution: float) -> float:
     """
     This function calculates the total loan amount required based on the property value,

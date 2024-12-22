@@ -1,4 +1,4 @@
-# utils.py 
+# utils.py
 
 def format_number(number: float) -> str:
     """
