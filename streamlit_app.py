@@ -1,9 +1,9 @@
 import streamlit as st
 from utils import (
-    format_number
+    format_number, 
+    add_percentage
 )
 from finance import (
-    add_percentage,
     calculate_loan_amount,
     calculate_profitability_percentage,
     calculate_loan_cost,
@@ -39,7 +39,7 @@ rental_vacancies = col2.number_input("Vacances locatives (mois)", min_value=0, v
 st.subheader("Données bancaires", divider="gray")
 col1, col2 = st.columns(2)
 contribution = col2.number_input("Apport", min_value=0, value=0)
-bank_interest_rate = col2.slider("Taux d'intérêts", 0.01, 8.00, 2.00)
+bank_interest_rate = col2.slider("Taux d'intérêts", 0.01, 8.00, 3.59)
 loan_duration_year = col2.slider("Durée de l'emprunt", 1, 25, 20)
 monthly_loan_insurance_cost = col2.number_input("Coût assurance emprunteur (mois)", min_value=0, value=50)
 monthly_pno_insurance_cost = col2.number_input("Coût assurance propriétaire non occupant (mois)", min_value=0, value=10)
