@@ -3,13 +3,7 @@ from utils import (
     format_number, 
     add_percentage
 )
-from finance import (
-    calculate_loan_amount,
-    calculate_profitability_percentage,
-    calculate_loan_cost,
-    calculate_cashflow_pretax,
-    calculate_loan_and_expenses
-)
+from finance import Property, Loan
 
 st.title("_Renta_ Calculator :bar_chart:")
 
@@ -52,26 +46,44 @@ loan_duration_year = col2.slider("Durée de l'emprunt", 1, 25, 20)
 monthly_loan_insurance_cost = col2.number_input("Coût assurance emprunteur (mois)", min_value=0, value=50)
 monthly_pno_insurance_cost = col2.number_input("Coût assurance propriétaire non occupant (mois)", min_value=0, value=10)
 
-# Loan calculation
-total_property_loan = calculate_loan_amount(acquisition_price, property_work, contribution)
-profitability = calculate_profitability_percentage(monthly_rent, rental_vacancies, expenses, acquisition_price, property_work, contribution)
-monthly_payment, total_loan_cost, loan_cost,  = calculate_loan_cost(total_property_loan, bank_interest_rate, loan_duration_year, monthly_loan_insurance_cost, monthly_pno_insurance_cost)
+# Creation of Property and Loan objects
+property_instance = Property(
+    value=acquisition_price,
+    work_cost=property_work,
+    contribution=contribution,
+    monthly_rent=monthly_rent,
+    rental_vacancies=rental_vacancies,
+    expenses=expenses
+)
+
+loan_instance = Loan(
+    amount=acquisition_price + property_work - contribution,
+    interest_rate=bank_interest_rate,
+    duration_years=loan_duration_year,
+    loan_insurance_cost=monthly_loan_insurance_cost,
+    pno_insurance_cost=monthly_pno_insurance_cost
+)
+
+# Calculs
+profitability = property_instance.profitability()
+loan_amount = property_instance.total_value()
+monthly_payment = loan_instance.calculate_monthly_payment()
+total_loan_cost = loan_instance.total_cost()
+loan_cost = loan_instance.loan_cost()
+monthly_cashflow_pretax = property_instance.calculate_cashflow_pretax(monthly_payment)
+monthly_payment_with_expenses = loan_instance.calculate_loan_and_expenses(monthly_payment, expenses)
 
 # Print results
-col1.metric(label="Montant emprunté", value=f"{format_number(total_property_loan)}")
+col1.metric(label="Montant à emprunter", value=f"{format_number(loan_amount)}")
 col1.metric(label="Coût total du crédit", value=f"{format_number(total_loan_cost)}")
 col1.metric(label="Mensualités de crédit", value=f"{format_number(monthly_payment)}")
 st.info("Des frais de dossier et de garantie peuvent s'ajouter, selon la banque. En général, ces frais représentent environ 1,5 fois le montant du prix du bien.", icon="ℹ️")
 
 
 # -------------------------------------------------- #
-# Kpis calculation
-monthly_cashflow_pretax = calculate_cashflow_pretax(monthly_rent, monthly_payment, expenses)
-monthly_payment_with_expenses = calculate_loan_and_expenses(monthly_payment, expenses)
-
 # Print results
 st.subheader("Kpis", divider="gray")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Rentabilité", value=f"{profitability:.1f}%")
-col2.metric(label="Emprunt et charges (mois)", value=f"{format_number(monthly_payment_with_expenses)}") # à remplacer par les charges mensuelles
+col2.metric(label="Emprunt et charges (mois)", value=f"{format_number(monthly_payment_with_expenses)}")
 col3.metric(label="Cashflow avant impôts (mois)", value=f"{format_number(monthly_cashflow_pretax)}")
