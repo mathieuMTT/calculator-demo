@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 # Define all the available pages, and return the current page
 current_page = st.navigation({
     "Overview": [
-        st.Page("hello.py", title="Hello World", icon=""),
+        st.Page("banking_file_generator.py", title="Dossier Bancaire Generator", icon=":material/money:"),
         st.Page("newsletter.py", title="Newsletter", icon=":material/email:"),
     ],
     "Tools": [
