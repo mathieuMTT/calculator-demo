@@ -1,9 +1,10 @@
 import streamlit as st
-from utils import (
-    format_number, 
-    add_percentage
-)
+from subscription_nl import display_newsletter_subscription
 from finance import Property, Loan
+from utils import format_number, add_percentage
+
+
+display_newsletter_subscription()
 
 st.title("_Renta_ Calculator :bar_chart:")
 
