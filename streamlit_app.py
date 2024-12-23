@@ -1,9 +1,13 @@
 import streamlit as st
 from subscription_nl import display_newsletter_subscription
+from metadata import get_html_metadata
 from finance import Property, Loan
 from utils import format_number, add_percentage
 
+# Inject HTML metadata
+st.markdown(get_html_metadata(), unsafe_allow_html=True)
 
+# Display newsletter bloc
 display_newsletter_subscription()
 
 st.title("_Renta_ Calculator :bar_chart:")
