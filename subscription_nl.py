@@ -15,11 +15,11 @@ def display_newsletter_subscription():
     components.html(
         """
         <div style="text-align: center;">
-            <iframe src="https://mathieumtt.substack.com/embed" 
-                    width="480" 
-                    height="320" 
-                    style="border:1px solid #EEE; background:white;" 
-                    frameborder="0" 
+            <iframe src="https://mathieumtt.substack.com/embed"
+                    width="480"
+                    height="320"
+                    style="border:1px solid #EEE; background:white;"
+                    frameborder="0"
                     scrolling="no">
             </iframe>
         </div>
