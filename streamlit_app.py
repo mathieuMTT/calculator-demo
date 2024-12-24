@@ -20,8 +20,5 @@ current_page = st.navigation({
     ],
 })
 
-# Inject HTML metadata
-st.markdown(get_html_metadata(), unsafe_allow_html=True)
-
 # current_page is also a Page object you can .run()
 current_page.run()
