@@ -73,7 +73,7 @@ monthly_payment_with_expenses = loan_instance.calculate_loan_and_expenses(monthl
 col1.metric(label="Montant à emprunter", value=f"{format_number(loan_amount)}")
 col1.metric(label="Coût total du crédit", value=f"{format_number(total_loan_cost)}")
 col1.metric(label="Mensualités de crédit", value=f"{format_number(monthly_payment)}")
-st.info("Des frais de dossier et de garantie peuvent s'ajouter, selon la banque. En général, ces frais représentent environ 1,5 fois le montant du prix du bien.", icon="ℹ️")
+#st.info("Des frais de dossier et de garantie peuvent s'ajouter, selon la banque. En général, ces frais représentent environ 1,5 fois le montant du prix du bien.", icon="ℹ️")
 
 
 # -------------------------------------------------- #

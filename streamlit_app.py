@@ -10,13 +10,13 @@ st.set_page_config(layout="wide")
 
 # Define all the available pages, and return the current page
 current_page = st.navigation({
-    "Overview": [
-        st.Page("banking_file_generator.py", title="Dossier Bancaire Generator", icon=":material/money:"),
-        st.Page("newsletter.py", title="Newsletter", icon=":material/email:"),
-    ],
-    "Tools": [
+    "Outils": [
         st.Page("pages/renta_calculator.py", title="Renta Calculator", icon=":material/calculate:"),
-        # ...
+        st.Page("pages/property_work_calculator.py", title="Travaux Calculator", icon=":material/build:"),
+        st.Page("pages/cs_banking_file_generator.py", title="Dossier Bancaire Generator", icon=":material/money:"),
+    ],
+    "Suivez le Projet": [
+        st.Page("newsletter.py", title="Newsletter : Ne rien manquer", icon=":material/email:"),
     ],
 })
 
