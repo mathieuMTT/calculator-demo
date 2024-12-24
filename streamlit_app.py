@@ -71,7 +71,7 @@ loan_instance = Loan(
 
 # Calculs
 profitability = property_instance.profitability()
-loan_amount = property_instance.total_value() - contribution
+loan_amount = property_instance.total_value()
 monthly_payment = loan_instance.calculate_monthly_payment()
 total_loan_cost = loan_instance.total_cost()
 loan_cost = loan_instance.loan_cost()

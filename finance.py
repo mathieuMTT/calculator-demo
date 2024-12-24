@@ -34,7 +34,7 @@ class Property:
         Returns:
             float: The total cost of the property, including the purchase price and work cost.
         """
-        return self.value + self.work_cost
+        return self.value + self.work_cost - self.contribution
 
     def profitability(self) -> float:
         """
