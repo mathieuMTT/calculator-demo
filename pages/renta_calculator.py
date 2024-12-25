@@ -73,6 +73,7 @@ else:
     # Include the cost of furniture in the loan but not the owner's contribution
     loan_amount = property_instance.get_loan_amount()
 
+
 loan_instance = Loan(
     amount=loan_amount,
     interest_rate=bank_interest_rate,
@@ -83,9 +84,8 @@ loan_instance = Loan(
 
 # Calculs
 profitability = property_instance.profitability()
-#loan_amount = property_instance.get_loan_amount()
-total_loan_cost = loan_instance.total_cost()
 monthly_payment = loan_instance.calculate_monthly_payment()
+total_loan_cost = loan_instance.total_cost()
 loan_cost = loan_instance.loan_cost()
 monthly_cashflow_pretax = property_instance.calculate_cashflow_pretax(monthly_payment)/12
 monthly_payment_with_expenses = loan_instance.calculate_loan_and_expenses(monthly_payment, expenses)
@@ -108,7 +108,7 @@ col2.metric(label="Emprunt et charges (mois)", value=f"{format_number(monthly_pa
 col3.metric(label="Cashflow avant impôts (mois)", value=f"{format_number(monthly_cashflow_pretax)}")
 col2.metric(label="Emprunt et charges annuel", value=f"{format_number(monthly_payment_with_expenses*12)}")
 col3.metric(label="CA annuel", value=f"{format_number(turnover)}")
-col1.metric(label="Coût total de l'opération", value=f"{format_number(property_instance.get_operation_cost())}")
+#col1.metric(label="Coût total de l'opération", value=f"{format_number(property_instance.get_operation_cost() + furniture)}")
 
 # Summary table
 data = {
@@ -117,14 +117,12 @@ data = {
         "Travaux",
         "Meubles",
         "Apport",
-        "Montant total du financement",
     ],
     "Montant (€)": [
         f"{format_number(property_price_with_fees)}",
         f"{format_number(property_work)}",
         f"{format_number(furniture)}",
         f"{format_number(contribution)}",
-        f"{format_number(loan_amount)}",
     ],
 }
 summary = pd.DataFrame(data)
