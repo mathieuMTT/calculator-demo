@@ -31,7 +31,7 @@ class Property:
         Calculate total cost of acquisition. Including agency and notary fees,
         work, furniture cost and owner's contribution.
         """
-        return self.price + self.work_cost + self.furniture + self.contribution
+        return self.price + self.work_cost + self.furniture
 
 
     def get_loan_amount(self) -> float:
