@@ -1,6 +1,6 @@
 # utils.py
 
-def add_percentage(base: float, percent: float) -> float:
+def get_percentage_increment(base: float, percent: float) -> float:
     """
     Adds a percentage to a given number and returns both the new total and the percentage value.
 

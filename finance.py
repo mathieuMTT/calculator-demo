@@ -18,7 +18,7 @@ class Property:
         rental_vacancies (float): The number of months the property is expected to be vacant.
         expenses (float): The annual expenses related to the property (taxes, maintenance, etc.).
     """
-    value: float
+    price: float
     work_cost: float
     furniture: float
     contribution: float
@@ -36,7 +36,7 @@ class Property:
         Returns:
             float: The total cost of the property, including the purchase price and work cost.
         """
-        return self.value + self.work_cost + self.furniture - self.contribution
+        return self.price + self.work_cost + self.furniture - self.contribution
     
     
     def get_rental_vacancies_amount(self) -> float:

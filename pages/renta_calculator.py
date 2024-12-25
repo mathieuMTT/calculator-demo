@@ -1,27 +1,25 @@
 import streamlit as st
 import pandas as pd
 from finance import Property, Loan
-from utils import format_number, add_percentage
+from utils import format_number, get_percentage_increment
 
 st.title("_Renta_ Calculator :bar_chart:")
 
 # -------------------------------------------------- #
 # Proporty data
 col1, col2 , col3 = st.columns(3)
-property_value = col1.number_input("Prix d'achat", min_value=0, value=100000)
+property_price_notax = col1.number_input("Prix d'achat", min_value=0, value=100000)
 agency_fees_rate = col2.number_input("Frais d'agence %", min_value=0.0, value=5.78)
 notary_fees_rate = col3.number_input("Frais de notaire %", min_value=0.0, value=8.0)
 
 # Fees calculation
-property_value_with_agency_fees, agency_fee_value = add_percentage(property_value, agency_fees_rate)
-property_value_with_notary_fees, notary_fee_value = add_percentage(property_value_with_agency_fees, notary_fees_rate)
-acquisition_price = property_value_with_notary_fees
+property_price_with_agency_fees, agency_fees_amount = get_percentage_increment(property_price_notax, agency_fees_rate)
+property_price_with_fees, notary_fees_amount = get_percentage_increment(property_price_with_agency_fees, notary_fees_rate)
 
 # Print results
-col1.metric(label="Prix d'achat (Frais d'agence et notaire inclus)", value=f"{format_number(acquisition_price)}")
-col2.metric(label="Frais d'agence", value=f"{format_number(agency_fee_value)}")
-col3.metric(label="Frais de notaire", value=f"{format_number(notary_fee_value)}")
-
+col1.metric(label="Prix d'achat (Frais d'agence et notaire inclus)", value=f"{format_number(property_price_with_fees)}")
+col2.metric(label="Frais d'agence", value=f"{format_number(agency_fees_amount)}")
+col3.metric(label="Frais de notaire", value=f"{format_number(notary_fees_amount)}")
 
 # -------------------------------------------------- #
 # Investment data
@@ -50,13 +48,15 @@ monthly_loan_insurance_cost = col2.number_input("Coût assurance emprunteur (moi
 monthly_pno_insurance_cost = col2.number_input("Coût assurance propriétaire non occupant (mois)", min_value=0, value=10)
 
 if furniture_choice == "Non":
+    # Do not include the price of the furniture in the loan
     loan_amount_furniture = 0
 else:
+    # Include it in the loan
     loan_amount_furniture = furniture
 
 # Creation of Property and Loan objects
 property_instance = Property(
-    value=acquisition_price,
+    price=property_price_with_fees,
     work_cost=property_work,
     furniture=loan_amount_furniture,
     contribution=contribution,
@@ -65,12 +65,15 @@ property_instance = Property(
     expenses=expenses
 )
 
-operation_cost = acquisition_price + property_work + furniture
+# Define the total cost of acquisition
+operation_cost = property_price_with_fees + property_work + furniture
 
 if furniture_choice == "Non":
-    loan_amount=operation_cost - furniture - contribution
+    # Do not include the cost of furniture and owner contribution in the loan
+    loan_amount = operation_cost - furniture - contribution
 else:
-    loan_amount=operation_cost - contribution
+    # Include the cost of furniture in the loan but not the owner's contribution
+    loan_amount = operation_cost - contribution
 
 loan_instance = Loan(
     amount=loan_amount,
@@ -80,8 +83,6 @@ loan_instance = Loan(
     pno_insurance_cost=monthly_pno_insurance_cost
 )
 
-#if furniture_choice == "Non":
-#else:
 # Calculs
 profitability = property_instance.profitability()
 loan_amount = property_instance.get_loan_amount()
@@ -121,7 +122,7 @@ data = {
         "Montant total du financement",
     ],
     "Montant (€)": [
-        f"{format_number(acquisition_price)}",
+        f"{format_number(property_price_with_fees)}",
         f"{format_number(property_work)}",
         f"{format_number(furniture)}",
         f"{format_number(contribution)}",
