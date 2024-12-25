@@ -26,6 +26,14 @@ class Property:
     rental_vacancies: float
     expenses: float
 
+    def get_operation_cost(self) -> float:
+        """
+        Calculate total cost of acquisition. Including agency and notary fees,
+        work, furniture cost and owner's contribution.
+        """
+        return self.price + self.work_cost + self.furniture + self.contribution
+
+
     def get_loan_amount(self) -> float:
         """
         Calculate and return the total property cost including fees and the cost of work.
@@ -36,7 +44,7 @@ class Property:
         Returns:
             float: The total cost of the property, including the purchase price and work cost.
         """
-        return self.price + self.work_cost + self.furniture - self.contribution
+        return self.get_operation_cost() - self.contribution
     
     
     def get_rental_vacancies_amount(self) -> float:

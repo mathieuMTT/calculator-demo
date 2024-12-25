@@ -3,6 +3,7 @@ import pandas as pd
 from finance import Property, Loan
 from utils import format_number, get_percentage_increment
 
+
 st.title("_Renta_ Calculator :bar_chart:")
 
 # -------------------------------------------------- #
@@ -65,15 +66,12 @@ property_instance = Property(
     expenses=expenses
 )
 
-# Define the total cost of acquisition
-operation_cost = property_price_with_fees + property_work + furniture
-
 if furniture_choice == "Non":
     # Do not include the cost of furniture and owner contribution in the loan
-    loan_amount = operation_cost - furniture - contribution
+    loan_amount = property_instance.get_loan_amount() - furniture
 else:
     # Include the cost of furniture in the loan but not the owner's contribution
-    loan_amount = operation_cost - contribution
+    loan_amount = property_instance.get_loan_amount()
 
 loan_instance = Loan(
     amount=loan_amount,
@@ -110,7 +108,7 @@ col2.metric(label="Emprunt et charges (mois)", value=f"{format_number(monthly_pa
 col3.metric(label="Cashflow avant impôts (mois)", value=f"{format_number(monthly_cashflow_pretax)}")
 col2.metric(label="Emprunt et charges annuel", value=f"{format_number(monthly_payment_with_expenses*12)}")
 col3.metric(label="CA annuel", value=f"{format_number(turnover)}")
-col1.metric(label="Coût total de l'opération", value=f"{format_number(operation_cost)}")
+col1.metric(label="Coût total de l'opération", value=f"{format_number(property_instance.get_operation_cost())}")
 
 # Summary table
 data = {
