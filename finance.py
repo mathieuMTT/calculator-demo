@@ -123,56 +123,16 @@ class Loan:
     loan_insurance_cost: float
     pno_insurance_cost: float
 
-    def get_insurance_costs(self) -> float:
+    def get_monthly_insurance_costs(self) -> float:
         """
         Calculate yearly insurance costs (sum of loan insurance and PNO insurance).
         """
-        return self.loan_insurance_cost + self.pno_insurance_cost * 12
+        return self.loan_insurance_cost + self.pno_insurance_cost
 
     
-    #def get_loan_cost(self) -> float:
-    #    """
-    #    Calculate the total cost of a mortgage loan using the annuity formula.
-#
-    #    This function computes the total cost of a loan based on the loan amount,
-    #    annual interest rate, and duration in years. It assumes fixed monthly payments.
-#
-    #    Args:
-    #        amount (float): The principal loan amount.
-    #        interest_rate (float): The annual interest rate (as a percentage).
-    #        duration_years (int): The loan duration in years.
-#
-    #    Returns:
-    #        float: The total cost of the loan (principal + interest).
-    #    """
-    #    if self.amount <= 0 or self.interest_rate < 0 or self.duration_years <= 0:
-    #        raise ValueError("Amount, interest rate, and duration must be positive values.")
-#
-    #    # Monthly interest rate
-    #    monthly_rate = self.interest_rate / 100 / 12
-#
-    #    # Total number of payments
-    #    total_payments = self.duration_years * 12
-#
-    #    # Calculate monthly payment
-    #    if monthly_rate == 0:
-    #        monthly_payment = self.amount / total_payments
-    #    else:
-    #        monthly_payment = (
-    #            self.amount * (monthly_rate * (1 + monthly_rate) ** total_payments) /
-    #            ((1 + monthly_rate) ** total_payments - 1)
-    #        )
-#
-    #    # Calculate total cost
-    #    total_cost = monthly_payment * total_payments
-#
-    #    return total_cost, monthly_payment
-
-    
-
-    def calculate_monthly_payment(self) -> float:
+    def get_loan_monthly_payment(self) -> float:
         """
-        Calculate the monthly payment for the loan, including insurance costs.
+        Calculate the monthly payment for the loan, without insurance costs.
 
         This method calculates the monthly payment using the loan amount, interest rate,
         and duration (in years). It also adds the loan insurance and PNO insurance costs 
@@ -188,7 +148,7 @@ class Loan:
             None
 
         Returns:
-            float: The total monthly payment, including both the loan repayment and insurance costs.
+            float: The total monthly payment, including both the loan monthly repayment.
         """
         # Monthly interest rate
         r = self.interest_rate / 100 / 12
@@ -198,6 +158,16 @@ class Loan:
         monthly_payment = self.amount * (r * (1 + r) ** n) / ((1 + r) ** n - 1)
         # Return the total monthly payment including insurance
         return monthly_payment
+    
+
+    def get_loan_insurance_monthly_payment(self) -> float:
+        """
+        Calculate the monthly payment for the loan, including insurance costs.
+        Returns:
+            float: The total monthly payment, including both the loan monthly repayment and insurance costs.
+        """
+        return self.get_loan_monthly_payment() + self.get_monthly_insurance_costs()
+
 
     def total_cost(self) -> float:
         """
@@ -213,7 +183,7 @@ class Loan:
             float: The total cost of the loan, including interest and insurance over the loan's duration.
         """
         # Calculate the monthly payment
-        monthly_payment = self.calculate_monthly_payment()
+        monthly_payment = self.get_loan_insurance_monthly_payment()
         # Calculate the total cost over the loan duration (number of months)
         n = self.duration_years * 12
         return monthly_payment * n
@@ -233,6 +203,7 @@ class Loan:
             float: The total cost of the loan minus the original loan amount (i.e., interest and insurance costs).
         """
         return self.total_cost() - self.amount
+    
 
     def calculate_loan_and_expenses(self, monthly_payment: float, expenses: float) -> float:
         """

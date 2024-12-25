@@ -84,7 +84,7 @@ loan_instance = Loan(
 
 # Calculs
 profitability = property_instance.profitability()
-monthly_payment = loan_instance.calculate_monthly_payment()
+monthly_payment = loan_instance.get_loan_insurance_monthly_payment()
 total_loan_cost = loan_instance.total_cost()
 loan_cost = loan_instance.loan_cost()
 monthly_cashflow_pretax = property_instance.calculate_cashflow_pretax(monthly_payment)/12
