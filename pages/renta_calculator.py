@@ -68,7 +68,7 @@ property_instance = Property(
 
 if furniture_choice == "Non":
     # Do not include the cost of furniture and owner contribution in the loan
-    loan_amount = property_instance.get_loan_amount() - furniture
+    loan_amount = property_instance.get_loan_amount()
 else:
     # Include the cost of furniture in the loan but not the owner's contribution
     loan_amount = property_instance.get_loan_amount()
@@ -83,7 +83,7 @@ loan_instance = Loan(
 
 # Calculs
 profitability = property_instance.profitability()
-loan_amount = property_instance.get_loan_amount()
+#loan_amount = property_instance.get_loan_amount()
 total_loan_cost = loan_instance.total_cost()
 monthly_payment = loan_instance.calculate_monthly_payment()
 loan_cost = loan_instance.loan_cost()
