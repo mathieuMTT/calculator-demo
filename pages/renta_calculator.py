@@ -6,6 +6,15 @@ from utils import format_number, get_percentage_increment
 
 st.title("_Renta_ Calculator :bar_chart:")
 
+square = 20.0
+property_work = 0
+expenses = 1000
+monthly_rent = 750
+rental_vacancies = 0.0
+furniture = 0
+loan_amount_furniture = 0
+contribution = 0
+
 # -------------------------------------------------- #
 # Proporty data
 col1, col2, col3 = st.columns(3)
@@ -13,13 +22,22 @@ property_price_notax = col1.number_input("Prix d'achat", min_value=0, value=1000
 agency_fees_rate = col2.number_input("Frais d'agence %", min_value=0.0, value=5.78)
 notary_fees_rate = col3.number_input("Frais de notaire %", min_value=0.0, value=8.0)
 
-# Fees calculation
-property_price_with_agency_fees, agency_fees_amount = get_percentage_increment(
-    property_price_notax, agency_fees_rate
+# Creation of Property and Loan objects
+property_instance = Property(
+    agency_fees_rate=agency_fees_rate,
+    notary_fees_rate=notary_fees_rate,
+    price=property_price_notax,
+    work_cost=property_work,
+    square=square,
+    furniture=loan_amount_furniture,
+    contribution=contribution,
+    monthly_rent=monthly_rent,
+    rental_vacancies=rental_vacancies,
+    expenses=expenses,
 )
-property_price_with_fees, notary_fees_amount = get_percentage_increment(
-    property_price_with_agency_fees, notary_fees_rate
-)
+
+property_price_with_agency_fees, agency_fees_amount = property_instance.get_property_price_with_agency_fees()
+property_price_with_fees, notary_fees_amount = property_instance.get_property_price_with_notary_fees()
 
 # Print results
 col1.metric(
@@ -33,6 +51,7 @@ col3.metric(label="Frais de notaire", value=f"{format_number(notary_fees_amount)
 # Investment data
 st.subheader("Données sur l'investissement", divider="gray")
 col1, col2 = st.columns(2)
+square = col1.number_input("Surface en m2", min_value=5.0, value=20.0)
 property_work = col1.number_input("Travaux", min_value=0, value=0)
 expenses = col1.number_input(
     "Charges annuelles (Taxe foncière, copro, entretien, etc)", min_value=0, value=1000
@@ -86,8 +105,11 @@ else:
 
 # Creation of Property and Loan objects
 property_instance = Property(
-    price=property_price_with_fees,
+    agency_fees_rate=agency_fees_rate,
+    notary_fees_rate=notary_fees_rate,
+    price=property_price_notax,
     work_cost=property_work,
+    square=square,
     furniture=loan_amount_furniture,
     contribution=contribution,
     monthly_rent=monthly_rent,
@@ -95,13 +117,8 @@ property_instance = Property(
     expenses=expenses,
 )
 
-# if furniture_choice == "Non":
-#    # Do not include the cost of furniture and owner contribution in the loan
-#    loan_amount = property_instance.get_loan_amount()
-# else:
-#    # Include the cost of furniture in the loan but not the owner's contribution
-#    loan_amount = property_instance.get_loan_amount()
 loan_amount = property_instance.get_loan_amount()
+price_per_square_meter = property_instance.get_price_per_square_meter()
 
 loan_instance = Loan(
     amount=loan_amount,
@@ -137,6 +154,7 @@ col1.metric(label="Mensualités de crédit", value=f"{format_number(monthly_paym
 st.subheader("Synthèse", divider="gray")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Rentabilité", value=f"{profitability:.1f}%")
+col1.metric(label="Prix au m2 après travaux (hors frais de notaire)", value=f"{format_number(price_per_square_meter)}")
 col2.metric(
     label="Emprunt et charges (mois)",
     value=f"{format_number(monthly_payment_with_expenses)}",

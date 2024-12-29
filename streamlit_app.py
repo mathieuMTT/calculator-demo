@@ -30,7 +30,7 @@ current_page = st.navigation(
         ],
         "Suivez le Projet": [
             st.Page(
-                "pages/newsletter.py",
+                "newsletter.py",
                 title="Newsletter : Ne rien manquer",
                 icon=":material/email:",
             ),
