@@ -36,8 +36,12 @@ property_instance = Property(
     expenses=expenses,
 )
 
-property_price_with_agency_fees, agency_fees_amount = property_instance.get_property_price_with_agency_fees()
-property_price_with_fees, notary_fees_amount = property_instance.get_property_price_with_notary_fees()
+property_price_with_agency_fees, agency_fees_amount = (
+    property_instance.get_property_price_with_agency_fees()
+)
+property_price_with_fees, notary_fees_amount = (
+    property_instance.get_property_price_with_notary_fees()
+)
 
 # Print results
 col1.metric(
@@ -154,7 +158,10 @@ col1.metric(label="Mensualités de crédit", value=f"{format_number(monthly_paym
 st.subheader("Synthèse", divider="gray")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Rentabilité", value=f"{profitability:.1f}%")
-col1.metric(label="Prix au m2 après travaux (hors frais de notaire)", value=f"{format_number(price_per_square_meter)}")
+col1.metric(
+    label="Prix au m2 après travaux (hors frais de notaire)",
+    value=f"{format_number(price_per_square_meter)}",
+)
 col2.metric(
     label="Emprunt et charges (mois)",
     value=f"{format_number(monthly_payment_with_expenses)}",

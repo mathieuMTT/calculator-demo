@@ -23,6 +23,7 @@ class Property:
         rental_vacancies (float): The number of months the property is expected to be vacant.
         expenses (float): The annual expenses related to the property (taxes, maintenance, etc.).
     """
+
     agency_fees_rate: float
     notary_fees_rate: float
     price: float
@@ -33,7 +34,6 @@ class Property:
     monthly_rent: float
     rental_vacancies: float
     expenses: float
-
 
     def get_property_price_with_agency_fees(self) -> tuple[float, float]:
         """
@@ -48,7 +48,6 @@ class Property:
         total_price_with_agency_fees = self.price + agency_fees_increment
         return total_price_with_agency_fees, agency_fees_increment
 
-    
     def get_property_price_with_notary_fees(self) -> tuple[float, float]:
         """
         Calculate the total price of the property with notary fees and the increment due to notary fees.
@@ -59,10 +58,13 @@ class Property:
                 - The increment added by the notary fees.
         """
         property_price_with_agency_fees, _ = self.get_property_price_with_agency_fees()
-        notary_fees_increment = property_price_with_agency_fees * (self.notary_fees_rate / 100)
-        total_price_with_notary_fees = property_price_with_agency_fees + notary_fees_increment
+        notary_fees_increment = property_price_with_agency_fees * (
+            self.notary_fees_rate / 100
+        )
+        total_price_with_notary_fees = (
+            property_price_with_agency_fees + notary_fees_increment
+        )
         return total_price_with_notary_fees, notary_fees_increment
-
 
     def get_operation_cost(self) -> float:
         """
@@ -71,7 +73,6 @@ class Property:
         """
         property_price_with_fees, _ = self.get_property_price_with_notary_fees()
         return property_price_with_fees + self.work_cost + self.furniture
-
 
     def get_loan_amount(self) -> float:
         """
@@ -85,13 +86,11 @@ class Property:
         """
         return self.get_operation_cost() - self.contribution
 
-
     def get_rental_vacancies_amount(self) -> float:
         """
         Calculate and return the total annual cost of rental vacations.
         """
         return self.rental_vacancies * self.monthly_rent
-
 
     def get_turnover_amount(self) -> float:
         """
@@ -99,20 +98,18 @@ class Property:
         """
         return (self.monthly_rent * 12) - self.get_rental_vacancies_amount()
 
-
     def get_net_income_amount(self) -> float:
         """
         Calculate and return net income, turnover - expenses.
         """
         return self.get_turnover_amount() - self.expenses
 
-
     def get_price_per_square_meter(self) -> float:
         """
         Calculates the total price of the property per square meter.
 
-        This method adds the purchase price of the property with agency fees 
-        (`property_price_with_agency_fees`) and the cost of renovations (`work_cost`), 
+        This method adds the purchase price of the property with agency fees
+        (`property_price_with_agency_fees`) and the cost of renovations (`work_cost`),
         then returns the total price per square meter.
 
         Returns:
@@ -120,7 +117,6 @@ class Property:
         """
         property_price_with_agency_fees, _ = self.get_property_price_with_agency_fees()
         return (property_price_with_agency_fees + self.work_cost) / self.square
-
 
     def profitability(self) -> float:
         """
@@ -134,7 +130,6 @@ class Property:
             float: The profitability of the property as a percentage.
         """
         return (self.get_net_income_amount() / self.get_loan_amount()) * 100
-
 
     def calculate_cashflow_pretax(self, monthly_payment: float) -> float:
         """
