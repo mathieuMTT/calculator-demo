@@ -57,19 +57,20 @@ st.subheader("Données sur l'investissement", divider="gray")
 col1, col2 = st.columns(2)
 square = col1.number_input("Surface en m2", min_value=5.0, value=20.0)
 property_work = col1.number_input("Travaux", min_value=0, value=0)
-expenses = col1.number_input(
-    "Charges annuelles (Taxe foncière, copro, entretien, etc)", min_value=0, value=1000
-)
 monthly_rent = col2.number_input("Loyer mensuel", min_value=0, value=750)
 rental_vacancies = col2.number_input(
     "Vacances locatives (1,0 = un mois)", min_value=0.0, value=0.0
 )
+expenses = col2.number_input(
+    "Charges annuelles (Taxe foncière, copro, entretien, etc)", min_value=0, value=1000
+)
 furniture = col1.number_input("Ameublement", min_value=0, value=0)
-furniture_choice = col2.selectbox(
+furniture_choice = col1.selectbox(
     "Inclure l'ameublement dans le prêt ?",
     ("Non", "Oui"),
     label_visibility="visible",
 )
+
 
 if furniture_choice == "Non":
     # Do not include the price of the furniture in the loan
@@ -184,12 +185,14 @@ data = {
         "Travaux",
         "Meubles",
         "Apport",
+        "Coût total de l'opération",
     ],
     "Montant (€)": [
         f"{format_number(property_price_with_fees)}",
         f"{format_number(property_work)}",
         f"{format_number(furniture)}",
         f"{format_number(contribution)}",
+        f"{format_number(property_instance.get_operation_cost() + furniture)}",
     ],
 }
 summary = pd.DataFrame(data)
