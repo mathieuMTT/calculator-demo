@@ -1,6 +1,7 @@
 import streamlit.components.v1 as components
 import streamlit as st
 
+
 def display_newsletter_subscription():
     """
     Display the newsletter subscription section.
