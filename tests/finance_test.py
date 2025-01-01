@@ -1,9 +1,6 @@
 import pytest
 from finance import Property, Loan
 
-import pytest
-from finance import Property, Loan
-
 def test_property_calculation():
     prop = Property(
         agency_fees_rate=5.78,
